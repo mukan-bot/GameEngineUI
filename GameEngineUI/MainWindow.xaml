@@ -11,6 +11,9 @@
     <!--xmlns:DXExtensions="clr-namespace:Microsoft.Wpf.Interop.DirectX;assembly=Microsoft.Wpf.Interop.DirectX"-->
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Grid x:Name="host">
             <Image>
                 <Image.Source>

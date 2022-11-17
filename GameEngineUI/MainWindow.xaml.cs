@@ -171,7 +171,8 @@ namespace GameEngineUI
             [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
             public static extern int Render(IntPtr resourcePointer, bool isNewSurface);
 
-            public static extern int SetCameraPhi(float phi);
+            //ここ消さないとハンドルされていない例外が出る
+            //public static extern int SetCameraPhi(float phi);
 
             /// <summary>
             /// Method used to invoke an Action that will catch DllNotFoundExceptions and display a warning dialog.
