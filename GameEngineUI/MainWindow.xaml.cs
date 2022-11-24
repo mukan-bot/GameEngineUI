@@ -177,6 +177,30 @@ namespace GameEngineUI
             [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
             public static extern int Render(IntPtr resourcePointer, bool isNewSurface);
 
+
+            //追加
+            [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetObjectPosition(string ObjectName, Vector3 Position);
+
+            [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetObjectRotation(string ObjectName, Vector3 Rotation);
+
+            [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void SetObjectScale(string ObjectName, Vector3 Scale);
+
+
+            [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
+            public static extern Vector3 GetObjectPosition(string ObjectName);
+
+            [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
+            public static extern Vector3 GetObjectRotation(string ObjectName);
+
+            [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
+            public static extern Vector3 GetObjectScale(string ObjectName);
+
+
+
+
             //ここ消さないとハンドルされていない例外が出る
             //public static extern int SetCameraPhi(float phi);
 
@@ -229,18 +253,60 @@ namespace GameEngineUI
 
         private void host_MouseMove(object sender, MouseEventArgs e)
         {
+            //ポインタのポジションを所得している
             Point mousePosition = e.GetPosition(host);
+            //DirectX内のカメラの座標を所得している
             Vector3 cameraPosition = NativeMethods.InvokeWithDllProtection(() => NativeMethods.GetObjectPosition("Camera"));
+            //DirectX内のカメラの回転を所得している
             Vector3 cameraRotation = NativeMethods.InvokeWithDllProtection(() => NativeMethods.GetObjectRotation("Camera"));
 
+            //右クリックしながらマウスを動かすと視点を移動するようにしている
             if(e.RightButton == MouseButtonState.Pressed)
             {
                 cameraRotation.Y += (float)(mousePosition.X - oldMousePosition.X) * 0.003f;
                 cameraRotation.X += (float)(mousePosition.Y - oldMousePosition.Y) * 0.003f;
-
+                //カメラの回転をDirectX内に送っている
                 NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectRotation("Camera", cameraRotation));
             }
+
+            //中ボタンクリックで平行移動出来るようにしている
+            if(e.MiddleButton == MouseButtonState.Pressed)
+            {
+                float dx = (float)(mousePosition.X - oldMousePosition.X) * 0.01f;
+                float dy = (float)(mousePosition.Y - oldMousePosition.Y) * 0.01f;
+
+                cameraPosition.X -= (float)Math.Cos(cameraRotation.Y) * dx - (float)Math.Sin(cameraRotation.Y) * (float)Math.Sin(cameraRotation.X) * dy;
+                cameraPosition.Z += (float)Math.Sin(cameraRotation.Y) * dx - (float)Math.Cos(cameraRotation.Y) * (float)Math.Sin(cameraRotation.X) * dy;
+                cameraPosition.Y += (float)Math.Cos(cameraRotation.Y) * dy;
+                //カメラの座標をDirectX内に送っている
+                NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectPosition("Camera", cameraPosition));
+
+            }
+
+
+
             oldMousePosition = mousePosition;
+        }
+
+        private void host_MouseWheel(object sender, MouseWheelEventArgs e)  //向いている方向にマウススクロールで移動する
+        {
+            Vector3 cameraPosition = NativeMethods.InvokeWithDllProtection(() => NativeMethods.GetObjectPosition("Camera"));
+            Vector3 cameraRotation = NativeMethods.InvokeWithDllProtection(() => NativeMethods.GetObjectRotation("Camera"));
+
+            //マウススクロールを所得している
+            int wheel = e.Delta;
+
+            //カメラの座標を計算している
+            Matrix4x4 rotation = Matrix4x4.CreateFromYawPitchRoll(cameraRotation.Y, cameraRotation.X, cameraRotation.Z);
+            Vector3 dz = new Vector3(rotation.M31, rotation.M32, rotation.M33);
+
+            //どれだけ動かすか計算している
+            cameraPosition += dz * wheel * 0.003f;
+
+            //カメラの座標をDirectX内に送っている
+            NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectPosition("Camera", cameraPosition));
+
+
         }
     }
 }
