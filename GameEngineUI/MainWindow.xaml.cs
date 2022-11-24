@@ -17,6 +17,9 @@ using System.Windows.Shapes;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 
+//追加（Vectorを使うため）
+using System.Numerics;
+
 namespace GameEngineUI
 {
     /// <summary>
@@ -26,6 +29,9 @@ namespace GameEngineUI
     { 
         TimeSpan lastRender;
         bool lastVisible;
+
+        //追加
+        Point oldMousePosition;
 
         public MainWindow()
         {
@@ -219,6 +225,22 @@ namespace GameEngineUI
 
                 return default(T);
             }
+        }
+
+        private void host_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point mousePosition = e.GetPosition(host);
+            Vector3 cameraPosition = NativeMethods.InvokeWithDllProtection(() => NativeMethods.GetObjectPosition("Camera"));
+            Vector3 cameraRotation = NativeMethods.InvokeWithDllProtection(() => NativeMethods.GetObjectRotation("Camera"));
+
+            if(e.RightButton == MouseButtonState.Pressed)
+            {
+                cameraRotation.Y += (float)(mousePosition.X - oldMousePosition.X) * 0.003f;
+                cameraRotation.X += (float)(mousePosition.Y - oldMousePosition.Y) * 0.003f;
+
+                NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectRotation("Camera", cameraRotation));
+            }
+            oldMousePosition = mousePosition;
         }
     }
 }
