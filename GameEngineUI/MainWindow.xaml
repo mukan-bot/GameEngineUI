@@ -7,14 +7,33 @@
         xmlns:local="clr-namespace:GameEngineUI"
         mc:Ignorable="d"
         Title="レベルエディタ" Height="450" Width="800">
-    <!--追加-->
+    <!--上の追加した所-->
     <!--xmlns:DXExtensions="clr-namespace:Microsoft.Wpf.Interop.DirectX;assembly=Microsoft.Wpf.Interop.DirectX"-->
 
     <Grid>
-        <!--<Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
-        </Grid.ColumnDefinitions>-->
-        <Grid x:Name="host" AllowDrop="True" PreviewDrop="host_PreviewDrop" MouseMove="host_MouseMove" MouseWheel="host_MouseWheel" >
+        </Grid.ColumnDefinitions>
+
+        <TabControl Grid.Column="0" AllowDrop="True" PreviewDrop="host_PreviewDrop" >
+            <TabItem Header="Hierarchy">
+                <ListBox x:Name="HierarchyListBox">
+
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Project">
+                <ListBox x:Name="ProjectListBox">
+
+                </ListBox>
+            </TabItem>
+        </TabControl>
+
+        <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+        
+        <Grid Grid.Column="2" x:Name="host" AllowDrop="True" PreviewDrop="host_PreviewDrop" MouseMove="host_MouseMove" MouseWheel="host_MouseWheel" >
             <Image>
                 <Image.Source>
                     <!--ここでDirectXからもらったイメージを表示する-->

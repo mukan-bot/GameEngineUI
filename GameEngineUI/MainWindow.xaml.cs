@@ -30,8 +30,31 @@ namespace GameEngineUI
         TimeSpan lastRender;
         bool lastVisible;
 
-        //追加
         Point oldMousePosition;
+
+        public class GameObject
+        {
+            public Vector3 Position { get; set; } = new Vector3(0.0f, 0.0f, 0.0f);
+            public Vector3 Rotation { get; set; } = new Vector3(0.0f, 0.0f, 0.0f);
+            public Vector3 Scale { get; set; } = new Vector3(0.0f, 0.0f, 0.0f);
+
+            public string ModelName { get; set; }
+
+            public object Content;
+
+            public GameObject(string content)
+            {
+                Content = content;
+            }
+
+            public override string ToString()
+            {
+                return Content.ToString();
+            }
+
+        }
+
+
 
         public MainWindow()
         {
@@ -315,11 +338,18 @@ namespace GameEngineUI
         {
             string[] paths = ((string[])e.Data.GetData(DataFormats.FileDrop));
 
-            
-            string filename = paths[0];
-            string objectName = System.IO.Path.GetFileNameWithoutExtension(filename);
+            for (int i = 0; i < paths.Length; i++)
+            {
+                string filename = paths[i];
+                string objectName = System.IO.Path.GetFileNameWithoutExtension(filename);
 
-            NativeMethods.InvokeWithDllProtection(() => NativeMethods.AddObject(objectName, filename));
+                GameObject gameObject = new GameObject(objectName);
+                gameObject.ModelName = filename;
+                HierarchyListBox.Items.Add(gameObject);
+
+                NativeMethods.InvokeWithDllProtection(() => NativeMethods.AddObject(objectName, filename));
+            }
+
         }
     }
 }
