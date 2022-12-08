@@ -14,7 +14,7 @@
         <!--<Grid.ColumnDefinitions>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>-->
-        <Grid x:Name="host" MouseMove="host_MouseMove" MouseWheel="host_MouseWheel" >
+        <Grid x:Name="host" AllowDrop="True" PreviewDrop="host_PreviewDrop" MouseMove="host_MouseMove" MouseWheel="host_MouseWheel" >
             <Image>
                 <Image.Source>
                     <!--ここでDirectXからもらったイメージを表示する-->

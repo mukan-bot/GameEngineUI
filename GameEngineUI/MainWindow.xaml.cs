@@ -198,6 +198,10 @@ namespace GameEngineUI
             [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
             public static extern Vector3 GetObjectScale(string ObjectName);
 
+            
+            [DllImport("GameEngineDLL.dll", CallingConvention = CallingConvention.Cdecl)]
+            public static extern void AddObject(string ObjectName, string FileName);
+
 
 
 
@@ -305,6 +309,17 @@ namespace GameEngineUI
             NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectPosition("Camera", cameraPosition));
 
 
+        }
+
+        private void host_PreviewDrop(object sender, DragEventArgs e)
+        {
+            string[] paths = ((string[])e.Data.GetData(DataFormats.FileDrop));
+
+            
+            string filename = paths[0];
+            string objectName = System.IO.Path.GetFileNameWithoutExtension(filename);
+
+            NativeMethods.InvokeWithDllProtection(() => NativeMethods.AddObject(objectName, filename));
         }
     }
 }
