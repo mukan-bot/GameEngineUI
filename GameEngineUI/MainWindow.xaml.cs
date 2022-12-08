@@ -283,8 +283,6 @@ namespace GameEngineUI
 
             }
 
-
-
             oldMousePosition = mousePosition;
         }
 
