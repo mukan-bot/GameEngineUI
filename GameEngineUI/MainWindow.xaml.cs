@@ -310,6 +310,30 @@ namespace GameEngineUI
 
             }
 
+            //左クリックされているかを調べてオブジェクトを移動させる
+            if(e.LeftButton == MouseButtonState.Pressed)
+            {
+                //asはキャスト？
+                GameObject gameObject = HierarchyListBox.SelectedItem as GameObject;
+                //何も選択されてなかったら終了
+                if (gameObject == null) return;
+                //マウスの移動量の所得
+                float dx = (float)(mousePosition.X - oldMousePosition.X) * 0.01f;
+                float dy = (float)(mousePosition.Y - oldMousePosition.Y) * 0.01f;
+                //カメラの向きとかから場所を計算（極座標→直行座標）
+                Vector3 position = gameObject.Position;
+                position.X += (float)Math.Cos(cameraRotation.Y) * dx - (float)Math.Sin(cameraRotation.Y) * (float)Math.Sin(cameraRotation.X) * dy;
+                position.Z -= (float)Math.Sin(cameraRotation.Y) * dx - (float)Math.Cos(cameraRotation.Y) * (float)Math.Sin(cameraRotation.X) * dy;
+                position.Y -= (float)Math.Cos(cameraRotation.X) * dy;
+                gameObject.Position = position;
+                //座標をDirectX内に送っている
+                //NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectPosition(gameObject.ToString(), gameObject.Position));
+                //インスペクターの情報の更新上のコメントアウトしてある処理は、関数内でやるのでいらない
+                ObjectToInspector();
+            }
+
+
+
             oldMousePosition = mousePosition;
         }
 
@@ -351,5 +375,94 @@ namespace GameEngineUI
             }
 
         }
+
+
+        private void Inspector_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Return) return;    //エンターキー以外がおされたら関数を終わりにする
+
+            InspectorToObject();
+        }
+
+
+
+
+        private void ObjectToInspector()    //オブジェクトの内容をインスペクターに反映させる
+        {
+            //ヒエラルキーで選択したアイテムを所得
+            GameObject gameObject = HierarchyListBox.SelectedItem as GameObject;
+
+
+            if (gameObject == null) return;
+
+            string objectName = gameObject.ToString();
+
+            
+            {//ポジション
+                PositionX.Text = gameObject.Position.X.ToString("F2");
+                PositionY.Text = gameObject.Position.Y.ToString("F2");
+                PositionZ.Text = gameObject.Position.Z.ToString("F2");
+
+                NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectPosition(objectName, gameObject.Position));
+            }
+
+            {//ローテーション
+                Vector3 rotation = gameObject.Rotation / (float)Math.PI * 180.0f;   //ラジアン角→デグリー角変換
+                RotationX.Text = rotation.X.ToString("F2");
+                RotationY.Text = rotation.Y.ToString("F2");
+                RotationZ.Text = rotation.Z.ToString("F2");
+
+                //NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectRotation(objectName, gameObject.Rotation));
+            }
+            {//スケール
+                ScaleX.Text = gameObject.Scale.X.ToString("F2");
+                ScaleY.Text = gameObject.Scale.Y.ToString("F2");
+                ScaleZ.Text = gameObject.Scale.Z.ToString("F2");
+
+                //NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectScale(objectName, gameObject.Scale));
+            }
+        }
+
+
+        private void InspectorToObject()    //インスペクターの内容をオブジェクトに反映させる
+        {
+            //ヒエラルキーで選択したアイテムを所得
+            GameObject gameObject = HierarchyListBox.SelectedItem as GameObject;
+
+
+            if (gameObject == null) return;
+
+            string objectName = gameObject.ToString();
+
+            {//ポジション
+                Vector3 position;
+                position.X = float.Parse(PositionX.Text);
+                position.Y = float.Parse(PositionY.Text);
+                position.Z = float.Parse(PositionZ.Text);
+                gameObject.Position = position;
+
+                NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectPosition(objectName, gameObject.Position));
+            }
+            {//ローテーション
+                Vector3 rotation;
+                rotation.X = float.Parse(PositionX.Text);
+                rotation.Y = float.Parse(PositionY.Text);
+                rotation.Z = float.Parse(PositionZ.Text);
+                gameObject.Position = rotation * 180.0f / (float)Math.PI;
+
+                NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectRotation(objectName, gameObject.Rotation));
+            }
+            {//スケール
+                Vector3 scale;
+                scale.X = float.Parse(PositionX.Text);
+                scale.Y = float.Parse(PositionY.Text);
+                scale.Z = float.Parse(PositionZ.Text);
+                gameObject.Position = scale;
+
+                //NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectScale(objectName, gameObject.Scale));
+            }
+        }
+
+
     }
 }

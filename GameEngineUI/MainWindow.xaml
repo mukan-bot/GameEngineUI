@@ -15,6 +15,8 @@
             <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
 
         <TabControl Grid.Column="0" AllowDrop="True" PreviewDrop="host_PreviewDrop" >
@@ -32,7 +34,7 @@
 
         <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 
-        
+
         <Grid Grid.Column="2" x:Name="host" AllowDrop="True" PreviewDrop="host_PreviewDrop" MouseMove="host_MouseMove" MouseWheel="host_MouseWheel" >
             <Image>
                 <Image.Source>
@@ -41,5 +43,47 @@
                 </Image.Source>
             </Image>
         </Grid>
+
+        <GridSplitter Grid.Column="3" Width="4" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+        <TabControl Grid.Column="4">
+
+
+            <TabItem Header="Inspector">
+                <StackPanel Orientation="Vertical">
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Position"/>
+                        <Label Content="X"/>
+                        <TextBox x:Name="PositionX" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <Label Content="Y"/>
+                        <TextBox x:Name="PositionY" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <Label Content="Z"/>
+                        <TextBox x:Name="PositionZ" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Rotation"/>
+                        <Label Content="X"/>
+                        <TextBox x:Name="RotationX" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <Label Content="Y"/>
+                        <TextBox x:Name="RotationY" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <Label Content="Z"/>
+                        <TextBox x:Name="RotationZ" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="Scale"/>
+                        <Label Content="X"/>
+                        <TextBox x:Name="ScaleX" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <Label Content="Y"/>
+                        <TextBox x:Name="ScaleY" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <Label Content="Z"/>
+                        <TextBox x:Name="ScaleZ" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>
