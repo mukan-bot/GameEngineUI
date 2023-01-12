@@ -9,17 +9,19 @@
 
         mc:Ignorable="d"
         Title="レベルエディタ" Height="450" Width="800">
-    <!--上の追加した所-->
-    <!--xmlns:DXExtensions="clr-namespace:Microsoft.Wpf.Interop.DirectX;assembly=Microsoft.Wpf.Interop.DirectX"-->
 
+    
     <Grid>
+        <!--プロジェクトウィンドウの表示用-->
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="250"/>
         </Grid.RowDefinitions>
-
+        
         <Grid Grid.Row="0">
+            
+            <!--ヒエラルキー、DX画面、インスペクター表示 用-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="Auto"/>
@@ -94,7 +96,8 @@
                 </TabItem>
             </TabControl>
         </Grid>
-
+        
+        <!--プロジェクトウィンドウの表示（エクスプローラー）-->
         <GridSplitter Grid.Row="1" Height="4" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
 
         <TabControl Grid.Row="2">
