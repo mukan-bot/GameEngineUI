@@ -36,7 +36,7 @@ namespace GameEngineUI
         {
             public Vector3 Position { get; set; } = new Vector3(0.0f, 0.0f, 0.0f);
             public Vector3 Rotation { get; set; } = new Vector3(0.0f, 0.0f, 0.0f);
-            public Vector3 Scale { get; set; } = new Vector3(0.0f, 0.0f, 0.0f);
+            public Vector3 Scale { get; set; } = new Vector3(1.0f, 1.0f, 1.0f);
 
             public string ModelName { get; set; }
 
@@ -445,21 +445,21 @@ namespace GameEngineUI
             }
             {//ローテーション
                 Vector3 rotation;
-                rotation.X = float.Parse(PositionX.Text);
-                rotation.Y = float.Parse(PositionY.Text);
-                rotation.Z = float.Parse(PositionZ.Text);
-                gameObject.Position = rotation * 180.0f / (float)Math.PI;
+                rotation.X = float.Parse(RotationX.Text);
+                rotation.Y = float.Parse(RotationY.Text);
+                rotation.Z = float.Parse(RotationZ.Text);
+                gameObject.Rotation = rotation * 180.0f / (float)Math.PI; //デグリー角変換→ラジアン角
 
                 NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectRotation(objectName, gameObject.Rotation));
             }
             {//スケール
                 Vector3 scale;
-                scale.X = float.Parse(PositionX.Text);
-                scale.Y = float.Parse(PositionY.Text);
-                scale.Z = float.Parse(PositionZ.Text);
-                gameObject.Position = scale;
+                scale.X = float.Parse(ScaleX.Text);
+                scale.Y = float.Parse(ScaleY.Text);
+                scale.Z = float.Parse(ScaleZ.Text);
+                gameObject.Scale = scale;
 
-                //NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectScale(objectName, gameObject.Scale));
+                NativeMethods.InvokeWithDllProtection(() => NativeMethods.SetObjectScale(objectName, gameObject.Scale));
             }
         }
 

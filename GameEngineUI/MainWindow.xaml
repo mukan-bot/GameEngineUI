@@ -75,11 +75,11 @@
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Scale"/>
                         <Label Content="X"/>
-                        <TextBox x:Name="ScaleX" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <TextBox x:Name="ScaleX" Text="1.0" KeyDown="Inspector_KeyDown"/>
                         <Label Content="Y"/>
-                        <TextBox x:Name="ScaleY" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <TextBox x:Name="ScaleY" Text="1.0" KeyDown="Inspector_KeyDown"/>
                         <Label Content="Z"/>
-                        <TextBox x:Name="ScaleZ" Text="0.0" KeyDown="Inspector_KeyDown"/>
+                        <TextBox x:Name="ScaleZ" Text="1.0" KeyDown="Inspector_KeyDown"/>
                     </StackPanel>
                 </StackPanel>
             </TabItem>
