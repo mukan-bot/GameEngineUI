@@ -20,6 +20,10 @@ using System.Windows.Interop;
 //追加（Vectorを使うため）
 using System.Numerics;
 
+//追加
+using Microsoft.WindowsAPICodePack.Shell;
+using System.Reflection;
+
 namespace GameEngineUI
 {
     /// <summary>
@@ -61,6 +65,16 @@ namespace GameEngineUI
             this.InitializeComponent();
             this.host.Loaded += new RoutedEventHandler(this.Host_Loaded);
             this.host.SizeChanged += new SizeChangedEventHandler(this.Host_SizeChanged);
+
+            //プロジェクトウィンドウ
+            {
+                Assembly assembly = Assembly.GetEntryAssembly();
+                string path = assembly.Location;
+                string dir = System.IO.Path.GetDirectoryName(path);
+
+                ProjectBrowser.Navigate(ShellFileSystemFolder.FromFolderPath(dir));
+            }
+
         }
 
         private static bool Init()
